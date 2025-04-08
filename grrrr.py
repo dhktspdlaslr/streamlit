@@ -1,15 +1,17 @@
 import streamlit as st
 from groq import Groq
+import re  # 정규식을 사용하기 위한 라이브러리
 
 # Streamlit UI 시작
-st.title('Groq API를 이용한 챗봇 테스트 페이지')
+st.title('Groq API를 이용한 Chat bot')
 
-# API 키 입력
-api_key = st.text_input("API 키를 입력해주세요:", type="password", key="api_key")
+# 사이드바에 API 키 입력 필드 추가
+st.sidebar.header("설정")
+api_key = st.sidebar.text_input("API 키를 입력해주세요:", type="password", key="api_key")
 
-# 입력된 API 키 확인
+# API 키 확인
 if not api_key:
-    st.warning("API 키를 입력해주세요.")
+    st.warning("API 키가 입력되지 않았습니다. 사이드바에 API 키를 입력해주세요.")
     st.stop()
 
 # Groq 클라이언트 초기화
@@ -19,8 +21,7 @@ except Exception as e:
     st.error(f"API 키가 유효하지 않습니다. 오류: {str(e)}")
     st.stop()
 
-import re  # 정규식을 사용하기 위한 라이브러리
-
+# API 응답 처리 함수
 def get_response(question):
     """Groq API로부터 응답을 처리하는 함수"""
     chat_completion = client.chat.completions.create(
@@ -39,7 +40,9 @@ question = st.text_input("질문을 입력해주세요:", key="question")
 
 # 버튼 클릭 시 응답 생성
 if st.button('회신'):
-    if not question:
+    if not api_key:
+        st.error("API 키가 입력되지 않았습니다. 질문을 하기 위해서는 API 키를 입력해주세요!")
+    elif not question:
         st.warning("질문을 입력해주세요.")
     else:
         with st.spinner('회신 중...'):
