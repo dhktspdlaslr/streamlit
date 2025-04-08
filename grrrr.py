@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 
 # Streamlit UI 시작
-st.title('Groq API 데모')
+st.title('Groq API를 이용한 챗봇 테스트 페이지')
 
 # API 키 입력
 api_key = st.text_input("API 키를 입력해주세요:", type="password", key="api_key")
